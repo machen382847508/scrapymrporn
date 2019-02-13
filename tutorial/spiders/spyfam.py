@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
-
+from ..items import TutorialItem
 
 class SpyfamSpider(scrapy.Spider):
     name = 'mrporn'
@@ -10,31 +10,35 @@ class SpyfamSpider(scrapy.Spider):
 
     def parse(self, response):
 
-        text = response.css('span.small::text').get()
-        totalnum = int(text.split(' ',1)[0])/36+1
+        # text = response.css('span.small::text').get()
+        # totalnum = int(text.split(' ',1)[0])/36+1
 
-        for i in range(1,3):
-            print("https://www.mrporn.hk/videos.php?duration=long&page="+str(i))
-            yield response.follow("https://www.mrporn.hk/videos.php?duration=long&page="+str(i), self.parsestart)
-
+        for i in range(1,2):
+            request = scrapy.Request("https://www.mrporn.hk/videos.php?duration=long&page="+str(i), self.parsestart)
+            request.meta['pagenum'] = i
+            yield request
 
     def parsestart(self, response):
 
         for vidbot in response.css('span.vidtitlebot '):
-            yield {
-                'pornname': vidbot.css('a::text').get(),
-                'pornurl': vidbot.css('a::attr(href)').get()
-            }
 
+            pornname = vidbot.css('a::text').get()
             #进入相关网页
             porn_page = vidbot.css('a::attr(href)').get()
             if porn_page is not None:
                 porn_page = response.urljoin(porn_page)
-                yield response.follow(porn_page, callback=self.spiderporn)
-
+                request = scrapy.Request(porn_page, callback=self.spiderporn)
+                request.meta['pornname'] = pornname
+                request.meta['pornurl'] = porn_page
+                request.meta['pagenum'] = response.meta['pagenum']
+                yield request
 
     #获取电影地址
     def spiderporn(self, response):
+        porns = TutorialItem()
         vedio = response.css('source::attr(src)').get()
-        print(vedio)
-
+        porns['pornname'] = response.meta['pornname']
+        porns['pornurl'] = response.meta['pornurl']
+        porns['porncontent'] = vedio
+        porns['pornpage'] = response.meta['pagenum']
+        yield porns

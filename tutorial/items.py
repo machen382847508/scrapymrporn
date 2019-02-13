@@ -14,3 +14,4 @@ class TutorialItem(scrapy.Item):
     pornname = scrapy.Field()
     pornurl = scrapy.Field()
     porncontent = scrapy.Field()
+    pornpage = scrapy.Field()
