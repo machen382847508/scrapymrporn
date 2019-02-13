@@ -5,7 +5,7 @@ from ..items import TutorialItem
 class SpyfamSpider(scrapy.Spider):
     name = 'mrporn'
     allowed_domains = ['www.mrporn.hk']
-    start_urls = ['https://www.mrporn.hk/videos.php?duration=long&page=1']
+    start_urls = ['https://www.mrporn.hk/videos.php?duration=short&page=1']
 
 
     def parse(self, response):
@@ -14,7 +14,7 @@ class SpyfamSpider(scrapy.Spider):
         # totalnum = int(text.split(' ',1)[0])/36+1
 
         for i in range(1,2):
-            request = scrapy.Request("https://www.mrporn.hk/videos.php?duration=long&page="+str(i), self.parsestart)
+            request = scrapy.Request("https://www.mrporn.hk/videos.php?duration=short&page="+str(i), self.parsestart)
             request.meta['pagenum'] = i
             yield request
 
