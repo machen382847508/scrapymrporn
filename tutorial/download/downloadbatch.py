@@ -29,7 +29,7 @@ class GetFile():
             filename = os.path.basename(self.re.url)
         return filename
 
-    def downfile(self, filename,pornid):  # 下载文件
+    def downfile(self, filename):  # 下载文件
         start = time.time()
         size = 0
         response = requests.get(self.url, stream=True)
@@ -45,8 +45,6 @@ class GetFile():
 
         end = time.time()
         print('\n'+'全部下载完成!用时%.2f秒'%(end-start))
-        DButils().update_finish_download(pornid)
-
 
 
 

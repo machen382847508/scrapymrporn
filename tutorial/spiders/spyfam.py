@@ -11,7 +11,7 @@ class SpyfamSpider(scrapy.Spider):
     def parse(self, response):
 
         # text = response.css('span.small::text').get()
-        # totalnum = int(text.split(' ',1)[0])/36+1
+        # totalnum = int(text.split(' ',1)[0])/36+2
 
         for i in range(1,2):
             request = scrapy.Request("https://www.mrporn.hk/videos.php?duration=short&page="+str(i), self.parsestart)
