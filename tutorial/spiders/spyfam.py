@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from ..items import TutorialItem
+import threading
 
 class SpyfamSpider(scrapy.Spider):
     name = 'mrporn'
@@ -9,17 +10,14 @@ class SpyfamSpider(scrapy.Spider):
 
 
     def parse(self, response):
-
         # text = response.css('span.small::text').get()
         # totalnum = int(text.split(' ',1)[0])/36+2
-
-        for i in range(1,2):
+        for i in range(1,6):
             request = scrapy.Request("https://www.mrporn.hk/videos.php?duration=short&page="+str(i), self.parsestart)
             request.meta['pagenum'] = i
             yield request
 
     def parsestart(self, response):
-
         for vidbot in response.css('span.vidtitlebot '):
 
             pornname = vidbot.css('a::text').get()

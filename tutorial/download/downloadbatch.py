@@ -36,15 +36,16 @@ class GetFile():
         chunk_size = 1024
         content_size = self.getsize()
         if response.status_code == 200:
+            print("开始下载文件:" + str(filename))
             print("[文件大小]:%0.2f MB" %(content_size / chunk_size /1024))
             with open(filename,"wb") as file:
                 for data in response.iter_content(chunk_size = chunk_size):
                     file.write(data)
                     size = os.path.getsize(filename)
-                    print('\r'+'[下载进度]:%s%.2f%%' %('>'*int(size * 50 / content_size ), float(size * 100 / content_size)),end=" ")
+                    print('\r'+filename+'[下载进度]:%s%.2f%%' %('>'*int(size * 50 / content_size ), float(size * 100 / content_size)),end=" ")
 
         end = time.time()
-        print('\n'+'全部下载完成!用时%.2f秒'%(end-start))
+        print('\n'+filename+'下载完成!用时%.2f秒'%(end-start))
 
 
 
